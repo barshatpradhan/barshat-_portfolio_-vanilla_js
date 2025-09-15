@@ -1410,41 +1410,88 @@ function initializeContactForm() {
  */
   document.getElementById("contact-form").addEventListener("submit", handleFormSubmission);
 
-  function handleFormSubmission(e) {
-    e.preventDefault();
+//   function handleFormSubmission(e) {
+//     e.preventDefault();
+
+//     const form = e.target;
+//     const formData = new FormData(form);
+
+//     const name = formData.get('name').trim();
+//     const email = formData.get('email').trim();
+//     const subject = formData.get('subject').trim();
+//     const message = formData.get('message').trim();
+
+//     if (validateAllFields(form)) {
+//       showFormLoading(form);
+
+//       emailjs.init("7wr5Obn1huOL0NIiq"); // Replace with your EmailJS public key
+
+//       emailjs.send("service_4qtpiky", "template_3szudmm", {
+//         from_name: name,
+//         from_email: email,
+//         subject: subject,
+//         message: message,
+//         to_email: "barshatpradhan321@gmail.com"
+//       })
+//       .then(() => {
+//         showFormSuccess(form);
+//       })
+//       .catch(() => {
+//         showFormError(form, "Failed to send message. Please try again.");
+//       });
+
+//     } else {
+//       showFormError(form, "Please correct the errors above.");
+//     }
+//   }
+
+/**
+ * Handle contact form submission
+ * @param {Event} e - Form submission event
+ */
+
+// document.getElementById("contact-form").addEventListener("submit", handleFormSubmission);
+document.getElementById("contact-form").addEventListener("submit", handleFormSubmission);
+function handleFormSubmission(e) {
+    e.preventDefault(); // Prevent default form submission
 
     const form = e.target;
     const formData = new FormData(form);
 
+    // Get form field values
     const name = formData.get('name').trim();
     const email = formData.get('email').trim();
     const subject = formData.get('subject').trim();
     const message = formData.get('message').trim();
 
-    if (validateAllFields(form)) {
-      showFormLoading(form);
+    // Validate all fields before submission
+    const isValid = validateAllFields(form);
 
-      emailjs.init("7wr5Obn1huOL0NIiq"); // Replace with your EmailJS public key
+    if (isValid) {
+        // Show loading state
+        showFormLoading(form);
 
-      emailjs.send("service_4qtpiky", "template_3szudmm", {
-        from_name: name,
-        from_email: email,
-        subject: subject,
-        message: message,
-        to_email: "barshatpradhan321@gmail.com"
-      })
-      .then(() => {
-        showFormSuccess(form);
-      })
-      .catch(() => {
-        showFormError(form, "Failed to send message. Please try again.");
-      });
+        // ✅ EmailJS integration
+        emailjs.send("service_4qtpiky", "template_3szudmm", {
+            from_name: name,
+            from_email: email,
+            subject: subject,
+            message: message,
+            to_email: "barshatpradhan321@gmail.com"
+        })
+        .then(function(response) {
+            console.log("SUCCESS!", response.status, response.text);
+            showFormSuccess(form);
+        })
+        .catch(function(error) {
+            console.error("FAILED...", error);
+            showFormError(form, "Failed to send message. Please try again.");
+        });
 
     } else {
-      showFormError(form, "Please correct the errors above.");
+        showFormError(form, "Please correct the errors above.");
     }
-  }
-
+}
 
 
 // function handleFormSubmission(e) {
@@ -1497,6 +1544,8 @@ function initializeContactForm() {
 //         showFormError(form, 'Please correct the errors above.');
 //     }
 // }
+
+
 
 /**
  * Validate individual form field
